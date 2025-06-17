@@ -1,0 +1,9 @@
+pandas==2.2.3
+numpy==2.0.2
+scikit-learn==1.6.1
+torchvision==0.21.0
+matplotlib==3.9.4
+scikit-image==0.24.0
+gdown==5.2.0
+pytorch-lightning==2.5.1
+# pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
