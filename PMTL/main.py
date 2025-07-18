@@ -1,10 +1,13 @@
-import numpy as np
-import torch
-import gdown
 import pickle
 import os
+import numpy as np
+
+import torch
+import gdown
+
 from torch.autograd import Variable
 from utils import circle_points, get_d_paretomtl_init, get_d_paretomtl
+
 from model.lenet import RegressionModel, RegressionTrain
 from model.resnet import MnistResNet, RegressionTrainResNet
 
@@ -19,7 +22,7 @@ def train(dataset, base_model, niter, npref, init_weight, pref_idx):
     # MultiMNIST: multi_mnist.pickle
     if dataset == 'mnist':
         with open(output,'rb') as f:
-            trainX, trainLabel,testX, testLabel = pickle.load(f)  
+            trainX, trainLabel, testX, testLabel = pickle.load(f) 
 
     trainX = torch.from_numpy(trainX.reshape(120000,1,36,36)).float()
     trainLabel = torch.from_numpy(trainLabel).long()
@@ -31,7 +34,7 @@ def train(dataset, base_model, niter, npref, init_weight, pref_idx):
     test_set  = torch.utils.data.TensorDataset(testX, testLabel)
     
     
-    batch_size = [256, 100]
+    batch_size = [256, 256]
     train_loader = torch.utils.data.DataLoader(
                      dataset=train_set,
                      batch_size=batch_size[0],
@@ -248,7 +251,7 @@ def train(dataset, base_model, niter, npref, init_weight, pref_idx):
     os.makedirs('logs', exist_ok=True)
     torch.save(model.model.state_dict(), 'logs/model_mtl.pickle')
 
-def run(dataset = 'mnist',base_model = 'lenet', niter = 100, npref = 5):
+def run(dataset = 'mnist', base_model = 'lenet', niter = 100, npref = 5):
     """
     run Pareto MTL
     """
@@ -258,6 +261,8 @@ def run(dataset = 'mnist',base_model = 'lenet', niter = 100, npref = 5):
     for i in range(npref):
         pref_idx = i 
         train(dataset, base_model, niter, npref, init_weight, pref_idx)
+
+        
 if __name__ == '__main__':
     file_id = '1b4ZjhHC8zSeAjlsaCOu1j6ZMC7G3V9dU'
     url = f'https://drive.google.com/uc?id={file_id}'

@@ -1,5 +1,7 @@
 import torch
 import numpy as np
+
+
 class MinNormSolver:
     MAX_ITER = 250
     STOP_CRIT = 1e-5

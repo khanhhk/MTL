@@ -1,5 +1,11 @@
-from torchvision import models
+
 import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+from torch.nn.modules.loss import CrossEntropyLoss
+from torchvision import models
+
 class RegressionTrainResNet(torch.nn.Module):
    
     def __init__(self, model,init_weight):
@@ -19,6 +25,7 @@ class RegressionTrainResNet(torch.nn.Module):
         task_loss = torch.stack(task_loss)
 
         return task_loss
+
 
 class MnistResNet(torch.nn.Module):
     def __init__(self, n_tasks):

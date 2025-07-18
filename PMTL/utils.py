@@ -1,6 +1,7 @@
 import numpy as np
 import torch
 from solvers import MinNormSolver
+
 def get_d_paretomtl_init(grads,value,weights,i):
     """ 
     calculate the gradient direction for ParetoMTL initialization 
