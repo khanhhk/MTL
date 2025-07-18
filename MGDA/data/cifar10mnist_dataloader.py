@@ -1,9 +1,8 @@
-
 from os import path
 import torch
-from torch import Tensor
 from torchvision import transforms
 import pickle
+
 from data.cifar10mnist_dataset import PaddedDataset, create_cifar10mnist
 
 def Cifar10Mnist_loaders(data_path, split_rate, transformers = [None, None], batch_size = [256, 256], SEED = 42):

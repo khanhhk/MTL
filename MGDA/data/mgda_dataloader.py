@@ -1,19 +1,3 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import torch
-import torch.optim
-from os import path
-from torch import Tensor
-from typing import Iterable, Union
-from PIL import Image
-from torchvision import transforms
-import pickle
-
-from typing import Iterable, Union
-_params_t = Union[Iterable[Tensor], Iterable[dict]]
-from data.get_multimnist_dataset import get_dataset
-from data.cifar10mnist_dataset import PaddedDataset, create_cifar10mnist
-
 class MGDA_Data:
     """
     This class bundles methods regarding the datasets for MGDA method.
@@ -133,7 +117,7 @@ def MultiMnist_dataset():
 
     def Transform(transform):
         if transform is None:
-            return transforms.Compose([ transforms.ToTensor()])
+            return transforms.Compose([transforms.ToTensor()])
         else:
             return transform
         

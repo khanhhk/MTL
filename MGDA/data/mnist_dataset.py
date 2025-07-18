@@ -1,16 +1,12 @@
-from __future__ import print_function
-import torch.utils.data as data
+import torch
 from PIL import Image
 import os
-import os.path
-import errno
 import numpy as np
-import torch
 import codecs
 from skimage.transform import resize
 
 
-class MNIST(data.Dataset):
+class MNIST(torch.utils.data.Dataset):
     """MNIST Dataset.
 
     Args:
@@ -39,10 +35,10 @@ class MNIST(data.Dataset):
 
     def __init__(self, root, train=True, transform=None, target_transform=None, download=False):
         self.root = os.path.expanduser(root)
+        self.train = train
         self.transform = transform
         self.target_transform = target_transform
-        self.train = train  # training set or test set
-
+        
         if download:
             self.download()
 
@@ -181,5 +177,3 @@ def read_image_file(path):
                 multi_data_im = resize(new_im, (28, 28))  #m.imresize(new_im, (28, 28), interp='nearest')
                 multi_data[left*1 + j,:,:] = multi_data_im
         return torch.from_numpy(multi_data).view(length,num_rows, num_cols), extension
-    
-

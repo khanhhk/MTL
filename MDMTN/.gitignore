@@ -1,6 +1,0 @@
-**/__pycache__/
-**/data/processed
-**/data/raw
-**/data/Cifar10Mnist
-*.pyc
-*.ipynb_checkpoints
