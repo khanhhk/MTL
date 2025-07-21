@@ -2,7 +2,6 @@
 **/data/processed
 **/data/raw
 *.pyc
-PMTL/multi_mnist.pickle
-PMTL_pytorch_lightning/multi_mnist.pickle
+**/multi_mnist.pickle
 **/data/Cifar10Mnist
 *.ipynb_checkpoints

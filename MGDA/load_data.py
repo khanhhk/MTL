@@ -1,64 +1,30 @@
-import numpy as np
-from data.MGDA_dataLoaders_utils import MGDA_Data, MultiMnist_dataset, Cifar10Mnist_dataset
+import pickle
+import torch
 
 
-def one_hot_encode_data(array):
-    """One hot encodes the target labels of a list of data-labels"""
-    res = []
-    for index in range(len(array)):
-        res.append([MGDA_Data.one_hot_encode(array[index][0]),
-                         MGDA_Data.one_hot_encode(array[index][1])]
-                   )
-    return res
+def load_MultiMnist_mgda(output_path="multi_mnist.pickle", batch_size=(256, 256)):
+    with open(output_path, 'rb') as f:
+        trainX, trainLabel, testX, testLabel = pickle.load(f)
 
-def load_Cifar10Mnist_mgda():
+    trainX = torch.from_numpy(trainX.reshape(120000,1,36,36)).float()
+    testX = torch.from_numpy(testX.reshape(20000,1,36,36)).float()
 
-    print("Retrieving data...")
+    trainLabel = torch.from_numpy(trainLabel).long()
+    testLabel = torch.from_numpy(testLabel).long()
 
-    cifar_labels = {
-        0: "Airplane", 1: "Automobile", 2: "Bird", 3: "Cat", 4: "Deer",
-        5: "Dog", 6: "Frog", 7: "Horse", 8: "Ship", 9: "Truck"
-    }
+    train_set = torch.utils.data.TensorDataset(trainX, trainLabel)
+    test_set  = torch.utils.data.TensorDataset(testX, testLabel)
 
-    data_train, data_test = Cifar10Mnist_dataset()
+    train_loader = torch.utils.data.DataLoader(
+        dataset=train_set,
+        batch_size=batch_size[0],
+        shuffle=True
+    )
 
-    X_train, y_train = zip(*data_train)
-    X_test, y_test = zip(*data_test)
+    test_loader = torch.utils.data.DataLoader(
+        dataset=test_set,
+        batch_size=batch_size[1],
+        shuffle=False
+    )
 
-    X_train = np.array(X_train)
-    X_test = np.array(X_test)
-
-    # plt.imshow(data_train[0][0])
-    # plt.title(f'{(cifar_labels[y_train[0][0]], y_train[0][1])}')
-    # plt.show()
-
-    y_train = np.array(one_hot_encode_data(y_train))
-    y_test = np.array(one_hot_encode_data(y_test))
-
-    print("Data is loaded")
-
-    return X_train, X_test, y_train, y_test
-
-
-def load_MultiMnist_mgda():
-
-    print("Retrieving data...")
-
-    data_train, data_test = MultiMnist_dataset()
-
-    X_train, y_train = zip(*data_train)
-    X_test, y_test = zip(*data_test)
-
-    X_train = np.array(X_train)
-    X_test = np.array(X_test)
-
-    # plt.imshow(data_train[0][0])
-    # plt.title(f'{(y_train[0][0].item(), y_train[0][1].item())}')
-    # plt.show()
-
-    y_train = np.array(one_hot_encode_data(y_train))
-    y_test = np.array(one_hot_encode_data(y_test))
-
-    print("Data is loaded")
-
-    return X_train, X_test, y_train, y_test
+    return trainX, testX, trainLabel, testLabel, train_loader, test_loader

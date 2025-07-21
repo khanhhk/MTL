@@ -1,20 +1,25 @@
 import torch
-import torch.backends.cudnn as cudnn
-import torch.optim
-
-from src.utils.MGDA_utils import train_test_MGDA
+import numpy as np
+import os
+import gdown
+from train import train_test_MGDA
 
 from config import get_params_mgda
 
-from torch import Tensor
-from typing import Iterable, Union
-_params_t = Union[Iterable[Tensor], Iterable[dict]]
-
-
-model_dir_path = "logs/MDMTN_MM_logs/MGDA_model_logs/model_states"
-archi_name = "MDMTN"
+base_model = "lenet"
+n_tasks = 2
+init_weight = np.array([0.5 , 0.5 ])
 data_name = "MultiMnist"
+
 if __name__ == "__main__":
+    file_id = '1b4ZjhHC8zSeAjlsaCOu1j6ZMC7G3V9dU'
+    url = f'https://drive.google.com/uc?id={file_id}'
+    output = 'multi_mnist.pickle'
+    if not os.path.exists(output):
+        print("Downloading dataset...")
+        gdown.download(url, output, quiet=False)
+    else:
+        print(f"Dataset already exists at '{output}', skipping download.")
 
     # Choose device
     use_cuda = torch.cuda.is_available()
@@ -22,14 +27,14 @@ if __name__ == "__main__":
     if use_cuda == False:
         print("WARNING: CPU will be used for training.")
 
-    model, Multimnist_params_mgda = get_params_mgda(archi_name.lower(), data_name, model_dir_path, device)
+    model, Multimnist_params_mgda = get_params_mgda(base_model, n_tasks, init_weight, data_name, device)
 
-    train_losses, test_accuracies = train_test_MGDA(model, data_name, Multimnist_params_mgda, device)
+    train_losses, test_accuracies = train_test_MGDA(model, n_tasks, data_name, Multimnist_params_mgda, device)
 
     import pickle
 
     ## Save the results lists to a file
-    with open(f'logs/MDMTN_MM_logs/MGDA_model_logs/MultiMnist_results_MDMTNmgda.pkl', 'wb') as f:
+    with open(f'logs/MGDA_model_logs/MultiMnist_results.pkl', 'wb') as f:
         pickle.dump((train_losses, test_accuracies), f)
 
     print("Done!")
