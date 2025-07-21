@@ -1,5 +1,6 @@
 import torch
 import os
+import pickle
 from optimizer import build_MGDA_optimizer
 import numpy as np
 import torch.nn as nn
@@ -71,5 +72,9 @@ def train_test_MGDA(model, n_tasks, data_name, mod_params_mgda, device):
     T_norm_1 = time()-t0
     print('\nComputation time: {} minutes'.format(T_norm_1/60))
     print(datetime.datetime.now())
-
+    
+    os.makedirs('logs', exist_ok=True)
+    torch.save(model_multi.model.state_dict(), 'logs/model_mtl.pickle')
+    with open(f'logs/MultiMnist_results.pkl', 'wb') as f:
+        pickle.dump((train_losses, test_accuracies), f)
     return train_losses, test_accuracies 

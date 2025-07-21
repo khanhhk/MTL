@@ -33,8 +33,8 @@ if __name__ == "__main__":
 
     import pickle
 
-    ## Save the results lists to a file
-    with open(f'logs/MGDA_model_logs/MultiMnist_results.pkl', 'wb') as f:
+    # Save the results lists to a file
+    with open(f'logs/MultiMnist_results.pkl', 'wb') as f:
         pickle.dump((train_losses, test_accuracies), f)
 
     print("Done!")
